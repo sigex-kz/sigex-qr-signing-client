@@ -1,0 +1,38 @@
+{
+  "name": "sigex-qr-signing-client",
+  "version": "0.0.1",
+  "description": "Клиент для работы с API сервиса SIGEX для подписания электронных документов ЭЦП через QR с помощью eGov mobile (aka QR подписание)",
+  "author": "sigex-kz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sigex-kz/sigex-qr-signing-client.git"
+  },
+  "keywords": [
+    "eGov mobile",
+    "QR подписание",
+    "QR"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sigex-kz/sigex-qr-signing-client/issues"
+  },
+  "homepage": "https://github.com/sigex-kz/sigex-qr-signing-client#readme",
+  "main": "ncalayer-client.js",
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "http-server": "^14.1.0",
+    "jsdoc-to-markdown": "^7.1.0",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "axios": "^1.2.2"
+  },
+  "scripts": {
+    "build": "npm run lint && npm run ts-check && npm run build-docs",
+    "build-docs": "jsdoc2md --no-cache --partial jsdoc2md-partials/sig-name.hbs --files sigex-qr-signing-client.js > API.md",
+    "lint": "eslint --ignore-pattern 'test/test-data-builder/js/vue.min.js' '**/*.js'",
+    "ts-check": "tsc --allowJs --checkJs --noEmit --target es6 --moduleResolution node sigex-qr-signing-client.*"
+  }
+}
