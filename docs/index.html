@@ -15,6 +15,14 @@
       <div class="row">
         <div class="col">
 
+          <h1 class="my-5">Пример использования библиотеки <a href="https://github.com/sigex-kz/sigex-qr-signing-client">https://github.com/sigex-kz/sigex-qr-signing-client</a></h1>
+
+          <p>
+            После заполнения формы и нажатия на кнопку отправки данных на подпись <strong>будет сформирован QR код</strong>, который будет отображен ниже на этой странцие.
+            Данные с указанными параметрами будут отправлены через API SIGEX в приложение <strong>eGov mobile пользователя</strong>, считавшего QR код.
+            После того, как пользователь подтвердит подписание в приложении eGov mobile, на странице <strong>будет отображена цифровая подпись</strong> под данными.
+          </p>
+
           <form v-on:submit.prevent="sign">
 
             <div class="form-group">
