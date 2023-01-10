@@ -31,8 +31,8 @@
   },
   "scripts": {
     "build": "npm run lint && npm run ts-check && npm run build-docs",
-    "build-docs": "jsdoc2md --no-cache --partial jsdoc2md-partials/sig-name.hbs --files sigex-qr-signing-client.js > API.md",
-    "lint": "eslint --ignore-pattern 'test/test-data-builder/js/vue.min.js' '**/*.js'",
+    "build-docs": "jsdoc2md --no-cache --partial jsdoc2md-partials/sig-name.hbs --files sigex-qr-signing-client.js > API.md && cp sigex-qr-signing-client.js docs/js/",
+    "lint": "eslint --ignore-pattern 'docs/js/*.js' '**/*.js'",
     "ts-check": "tsc --allowJs --checkJs --noEmit --target es6 --moduleResolution node sigex-qr-signing-client.*"
   }
 }
