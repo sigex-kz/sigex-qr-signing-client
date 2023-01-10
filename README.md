@@ -10,6 +10,13 @@
 
 Пример: https://sigex-kz.github.io/sigex-qr-signing-client/
 
+Библиотека использует следующие вызовы API сервиса SIGEX:
+- [`POST /api/egovQr - зарегистрировать новую процедуру подписания ЭЦП через QR`](https://sigex.kz/support/developers/#egov-qr)
+- [`POST /api/egovQr/{qrId} - отправка данных на подписание`](https://sigex.kz/support/developers/#egov-qr-send-data)
+- [`GET /api/egovQr/{qrId} - получение подписей`](https://sigex.kz/support/developers/#egov-qr-get-signatures)
+
+Описание работы API подписания через QR, реализованного в SIGEX, приведено в статье https://sigex.kz/blog/2022-12-14-signing-via-qr/
+
 ## Использование
 
 Одним из следующих образов:
