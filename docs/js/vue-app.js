@@ -18,7 +18,7 @@ new Vue({ // eslint-disable-line no-new, no-undef
       this.waiting = true;
 
       try {
-        const qrSigner = new QRSigningClientCMS(this.description);
+        const qrSigner = new QRSigningClientCMS(this.description, this.attachData);
         qrSigner.addDataToSign([this.name], this.dataB64, [], this.isPDF);
         const qrCode = await qrSigner.registerQRSinging();
         this.qrCodeImage = `data:image/gif;base64,${qrCode}`;
