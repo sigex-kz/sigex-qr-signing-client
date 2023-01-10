@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Пример использования sigex-qr-signing-client.js</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <script src="js/axios.min.js"></script>
+    <script src="js/sigex-qr-signing-client.js"></script>
+    <script src="js/vue.min.js""></script>
+  </head>
+  <body>
+    <div class="container" id="app">
+      <div class="row">
+        <div class="col">
+
+          <form v-on:submit.prevent="sign">
+
+            <div class="form-group">
+              <label>Описание подписываемых данных</label>
+              <input type="text" class="form-control" v-model="description"></input>
+            </div>
+
+            <div class="form-group">
+              <label>Имя подписываемого блока данных</label>
+              <input type="text" class="form-control" v-model="name"></input>
+            </div>
+
+            <div class="form-group">
+              <label>Данные на подпись в base64</label>
+              <textarea class="form-control my-1" v-model="dataB64" placeholder="Данные на подпись в base64" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" v-model="isPDF"></input>
+              <label class="form-check-label">Подписываемые данные - это PDF файл</label>
+            </div>
+
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" v-model="attachData"></input>
+              <label class="form-check-label">Вложить данные в подпись</label>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+              <button v-if="waiting" type="button" class="btn btn-primary mb-1" disabled>
+                <span class="spinner-border spinner-border-sm"></span>
+                Ожидаем подпись...
+              </button>
+              <button v-else type="submit" class="btn btn-primary">Отправить на подпись</button>
+            </div>
+
+            <div>
+              <div v-if="qrCodeImage">
+                <img v-bind:src="qrCodeImage">
+              </div>
+            </div>
+
+            <div>
+              <div v-if="signature">
+                <textarea class="form-control my-3" v-model="signature" rows="3" disabled></textarea>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <script src="js/vue-app.js"></script>
+  </body>
+</html>

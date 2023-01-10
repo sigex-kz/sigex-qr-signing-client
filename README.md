@@ -8,6 +8,8 @@
 
 Документация по API: [API.md](API.md).
 
+Пример: https://sigex-kz.github.io/sigex-qr-signing-client/
+
 ## Использование
 
 Одним из следующих образов:

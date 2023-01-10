@@ -1,0 +1,1 @@
+../../sigex-qr-signing-client.js
