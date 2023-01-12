@@ -1,8 +1,6 @@
 // @ts-check
 
-/* global axios */
-
-((exports, axios, window) => { // eslint-disable-line max-classes-per-file
+((exports, window) => { // eslint-disable-line max-classes-per-file
   /**
    * Класс ошибок QRSigningError.
    */
@@ -93,21 +91,28 @@
           description: this.description,
         };
 
-        const response = await axios.post(
+        const response = await fetch(
           `${this.baseUrl}/api/egovQr`,
-          data,
           {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
           },
         );
 
-        if (response.data.message) {
-          throw new Error(response.data.message);
+        if (!response.ok) {
+          throw new Error(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
         }
 
-        this.qrCode = response.data.qrCode;
-        this.dataURL = response.data.dataURL;
-        this.signURL = response.data.signURL;
+        const responseJson = await response.json();
+
+        if (responseJson.message) {
+          throw new Error(responseJson.message);
+        }
+
+        this.qrCode = responseJson.qrCode;
+        this.dataURL = responseJson.dataURL;
+        this.signURL = responseJson.signURL;
 
         return this.qrCode;
       } catch (err) {
@@ -154,17 +159,16 @@
 
         for (let i = 0; i < this.retries; i += 1) {
           try {
-            response = await axios.post( // eslint-disable-line no-await-in-loop
+            response = await fetch( // eslint-disable-line no-await-in-loop
               this.dataURL,
-              data,
               {
-                timeout: this.timeout,
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
               },
             );
 
             // Будем пытаться отправлять запросы до тех пор, пока не получим ответа.
-            // По таймауту axios будет выбрасывать исключения, мы их будем игнорировать.
             break;
           } catch (err) {
             // Игнорируем исключение и пробуем снова.
@@ -175,8 +179,14 @@
           throw new Error(`Не удалось получить ответа от сервера ${this.dataURL}.`);
         }
 
-        if (response.data.message) {
-          throw new Error(response.data.message);
+        if (!response.ok) {
+          throw new Error(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
+        }
+
+        const responseJson = await response.json();
+
+        if (responseJson.message) {
+          throw new Error(responseJson.message);
         }
       } catch (err) {
         throw new QRSigningError('Не удалось отправить данные.', err);
@@ -196,15 +206,11 @@
 
         for (let i = 0; i < this.retries; i += 1) {
           try {
-            response = await axios.get( // eslint-disable-line no-await-in-loop
+            response = await fetch( // eslint-disable-line no-await-in-loop
               this.signURL,
-              {
-                timeout: this.timeout,
-              },
             );
 
             // Будем пытаться отправлять запросы до тех пор, пока не получим ответа.
-            // По таймауту axios будет выбрасывать исключения, мы их будем игнорировать.
             break;
           } catch (err) {
             // Игнорируем исключение и пробуем снова.
@@ -215,11 +221,17 @@
           throw new Error(`Не удалось получить ответа от сервера ${this.signURL}.`);
         }
 
-        if (response.data.message) {
-          throw new Error(response.data.message);
+        if (!response.ok) {
+          throw new Error(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
         }
 
-        const signatures = response.data.documentsToSign.map(
+        const responseJson = await response.json();
+
+        if (responseJson.message) {
+          throw new Error(responseJson.message);
+        }
+
+        const signatures = responseJson.documentsToSign.map(
           (documentToSign) => documentToSign.document.file.data,
         );
 
@@ -243,6 +255,5 @@
   exports.QRSigningClientCMS = QRSigningClientCMS; // eslint-disable-line no-param-reassign
 })(
   typeof exports === 'undefined' ? this : exports,
-  typeof axios === 'undefined' ? require('axios') : axios,
   typeof window === 'undefined' ? { btoa(x) { return x; } } : window,
 ); // Заглушка для NodeJS
