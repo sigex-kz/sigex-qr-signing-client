@@ -29,8 +29,7 @@
       this.description = description;
       this.attach = attach;
       this.baseUrl = baseUrl;
-      this.timeout = 5 * 60 * 1000; // 5 минут в миллисекундах
-      this.retries = 100;
+      this.retries = 25;
       this.documentsToSign = [];
       this.expireAt = null;
       this.dataURL = null;
@@ -164,6 +163,7 @@
               {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                cache: 'no-store',
                 body: JSON.stringify(data),
               },
             );
@@ -208,6 +208,9 @@
           try {
             response = await fetch( // eslint-disable-line no-await-in-loop
               this.signURL,
+              {
+                cache: 'no-store',
+              },
             );
 
             // Будем пытаться отправлять запросы до тех пор, пока не получим ответа.
