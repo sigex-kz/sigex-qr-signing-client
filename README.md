@@ -26,10 +26,25 @@
 ```js
 async qrSign() {
   try {
+    // Данные на подпись закодированные в base64
+    const dataToSignBase64 = 'MTEK';
+
     const qrSigner = new QRSigningClientCMS('Запрос на подписание');
-    qrSigner.addDataToSign('Данные на подпись', 'MTEK', [], false);
+    qrSigner.addDataToSign('Данные на подпись', dataToSignBase64, [], false);
     const qrCode = await qrSigner.registerQRSinging();
+
+    // Полученное изображение можно отобразить пользователю чтобы он считал его с помощью
+    // приложения eGov mobile на своем мобильном телефоне. То есть участвуют два устройства:
+    // - на первом устройстве (ПК или ноутбук) отображается QR код;
+    // - на втором (мобильный телефон) пользователь открывает eGov mobile и сканирует QR код.
     const qrCodeDataString = `data:image/gif;base64,${qrCode}`;
+
+    // Эту ссылку можно отобразить на мобильном устройстве в том случае, если предполагается
+    // использовать только одно устройство (мобильный телефон), на котором установлен eGov mobile
+    // (кросс подписание).
+    // Когда пользователь кликнет по ссылке, откроется eGov mobile с запущенной процедурой
+    // подписания.
+    const eGovMobileLaunchLink = qrSigner.getEGovMobileLaunchLink();
 
     const signatures = await qrSigner.getSignatures();
     return signature[0];
