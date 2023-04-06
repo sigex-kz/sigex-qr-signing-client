@@ -150,7 +150,7 @@
      *
      * @returns {String} ссылка для запуска процедуры подписания в eGov Business.
      */
-     getEGovBusinessLaunchLink() {
+    getEGovBusinessLaunchLink() {
       return this.eGovBusinessLaunchLink;
     }
 
