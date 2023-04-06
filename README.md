@@ -39,12 +39,13 @@ async qrSign() {
     // - на втором (мобильный телефон) пользователь открывает eGov mobile и сканирует QR код.
     const qrCodeDataString = `data:image/gif;base64,${qrCode}`;
 
-    // Эту ссылку можно отобразить на мобильном устройстве в том случае, если предполагается
+    // Эти ссылки можно отобразить на мобильном устройстве в том случае, если предполагается
     // использовать только одно устройство (мобильный телефон), на котором установлен eGov mobile
-    // (кросс подписание).
-    // Когда пользователь кликнет по ссылке, откроется eGov mobile с запущенной процедурой
-    // подписания.
+    // или eGov Business (кросс подписание).
+    // Когда пользователь кликнет по ссылке, откроется соответствующее приложение с запущенной
+    // процедурой подписания.
     const eGovMobileLaunchLink = qrSigner.getEGovMobileLaunchLink();
+    const eGovBusinessLaunchLink = qrSigner.getEGovBusinessLaunchLink();
 
     const signatures = await qrSigner.getSignatures();
     return signature[0];
