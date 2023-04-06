@@ -28,6 +28,7 @@
     * [.registerQRSinging()](#QRSigningClientCMS+registerQRSinging) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.getQR()](#QRSigningClientCMS+getQR) ⇒ <code>String</code>
     * [.getEGovMobileLaunchLink()](#QRSigningClientCMS+getEGovMobileLaunchLink) ⇒ <code>String</code>
+    * [.getEGovBusinessLaunchLink()](#QRSigningClientCMS+getEGovBusinessLaunchLink) ⇒ <code>String</code>
     * [.getSignatures([dataSentCallback])](#QRSigningClientCMS+getSignatures) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
 
 <a name="new_QRSigningClientCMS_new"></a>
@@ -87,6 +88,15 @@
 
 **Kind**: instance method of [<code>QRSigningClientCMS</code>](#QRSigningClientCMS)  
 **Returns**: <code>String</code> - ссылка для запуска процедуры подписания в eGov mobile.  
+<a name="QRSigningClientCMS+getEGovBusinessLaunchLink"></a>
+
+### qrSigningClientCMS.getEGovBusinessLaunchLink() ⇒ <code>String</code>
+Получить ссылку для запуска процедуры подписания в eGov Business (кросс подписание)
+- для тех случаев, когда нужно выполнять подписание на том же самом устройстве, без
+необходимости сканировать QR код (необходимо предварительно выполнить регистрацию).
+
+**Kind**: instance method of [<code>QRSigningClientCMS</code>](#QRSigningClientCMS)  
+**Returns**: <code>String</code> - ссылка для запуска процедуры подписания в eGov Business.  
 <a name="QRSigningClientCMS+getSignatures"></a>
 
 ### *(async)* qrSigningClientCMS.getSignatures([dataSentCallback]) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>

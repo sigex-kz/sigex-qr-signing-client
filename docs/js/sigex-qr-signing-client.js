@@ -36,6 +36,7 @@
       this.signURL = null;
       this.qrCode = null;
       this.eGovMobileLaunchLink = null;
+      this.eGovBusinessLaunchLink = null;
     }
 
     /**
@@ -114,6 +115,7 @@
         this.dataURL = responseJson.dataURL;
         this.signURL = responseJson.signURL;
         this.eGovMobileLaunchLink = responseJson.eGovMobileLaunchLink;
+        this.eGovBusinessLaunchLink = responseJson.eGovBusinessLaunchLink;
 
         return this.qrCode;
       } catch (err) {
@@ -139,6 +141,17 @@
      */
     getEGovMobileLaunchLink() {
       return this.eGovMobileLaunchLink;
+    }
+
+    /**
+     * Получить ссылку для запуска процедуры подписания в eGov Business (кросс подписание)
+     * - для тех случаев, когда нужно выполнять подписание на том же самом устройстве, без
+     * необходимости сканировать QR код (необходимо предварительно выполнить регистрацию).
+     *
+     * @returns {String} ссылка для запуска процедуры подписания в eGov Business.
+     */
+    getEGovBusinessLaunchLink() {
+      return this.eGovBusinessLaunchLink;
     }
 
     /**
