@@ -30,7 +30,7 @@ async qrSign() {
     const dataToSignBase64 = 'MTEK';
 
     const qrSigner = new QRSigningClientCMS('Запрос на подписание');
-    qrSigner.addDataToSign('Данные на подпись', dataToSignBase64, [], false);
+    qrSigner.addDataToSign(['Данные на подпись'], dataToSignBase64, [], false);
     const qrCode = await qrSigner.registerQRSinging();
 
     // Полученное изображение можно отобразить пользователю чтобы он считал его с помощью
