@@ -46,8 +46,8 @@
      * [ru, kk, en]. Массив должен сожердать как минимум одну строку, в этом случае она будет
      * использоваться для всех языков.
      *
-     * @param {String | ArrayBuffer} data данные, которые нужно подписать, в виде строки Base64 либо
-     * ArrayBuffer.
+     * @param {String | ArrayBuffer | Blob | File} data данные, которые нужно подписать,
+     * в виде строки Base64 либо ArrayBuffer, Blob или File.
      *
      * @param {Object[]} [meta = []] опциональный массив объектов метаданных, содержащих поля
      * `"name"` и `"value"` со строковыми значениями.
@@ -57,9 +57,19 @@
      *
      * @throws QRSigningError
      */
-    addDataToSign(names, data, meta = [], isPDF = false) {
+    async addDataToSign(names, data, meta = [], isPDF = false) {
       if (names.length === 0) {
         throw new QRSigningError('Данные на подписание предоставлены не корректно.', 'Необходимо указать хотябы одно имя для подписываемых данных.');
+      }
+
+      let dataB64 = data;
+      if (typeof data !== 'string') {
+        let dataArrayBuffer = data;
+        if (data instanceof Blob) {
+          dataArrayBuffer = await data.arrayBuffer();
+        }
+
+        dataB64 = QRSigningClientCMS.arrayBufferToB64(dataArrayBuffer);
       }
 
       const documentToSign = {
@@ -71,7 +81,7 @@
         document: {
           file: {
             mime: isPDF ? '@file/pdf' : '',
-            data: (typeof data === 'string') ? data : QRSigningClientCMS.arrayBufferToB64(data),
+            data: dataB64,
           },
         },
       };
