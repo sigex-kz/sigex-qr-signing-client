@@ -16,6 +16,8 @@
 
 Описание работы API подписания через QR, реализованного в SIGEX, приведено в статье https://sigex.kz/blog/2022-12-14-signing-via-qr/
 
+**Внимание:** начиная с версии v0.3.0 метод `addDataToSign` стал асинхронным.
+
 ## Использование
 
 Одним из следующих образов:
@@ -31,7 +33,7 @@ async qrSign() {
     const dataToSignBase64 = 'MTEK';
 
     const qrSigner = new QRSigningClientCMS('Запрос на подписание');
-    qrSigner.addDataToSign(['Данные на подпись'], dataToSignBase64, [], false);
+    await qrSigner.addDataToSign(['Данные на подпись'], dataToSignBase64, [], false);
     const qrCode = await qrSigner.registerQRSinging();
 
     // Полученное изображение можно отобразить пользователю чтобы он считал его с помощью
