@@ -31,7 +31,12 @@ new Vue({ // eslint-disable-line no-new, no-undef
             reader.readAsDataURL(fileUploadInput.files[0]);
           }));
 
-          qrSigner.addDataToSign([fileUploadInput.files[0].name], dataB64ToSend.split(',')[1]);
+          qrSigner.addDataToSign(
+            [fileUploadInput.files[0].name],
+            dataB64ToSend.split(',')[1],
+            [],
+            fileUploadInput.files[0].name.toLowerCase().endsWith('.pdf'),
+          );
         }
 
         const qrCode = await qrSigner.registerQRSinging();
