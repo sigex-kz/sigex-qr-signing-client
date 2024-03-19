@@ -51,7 +51,7 @@ async qrSign() {
     const eGovBusinessLaunchLink = qrSigner.getEGovBusinessLaunchLink();
 
     const signatures = await qrSigner.getSignatures();
-    return signature[0];
+    return signatures[0];
   } catch (err) {
     console.log(err);
     console.log(err.details);
