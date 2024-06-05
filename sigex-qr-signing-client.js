@@ -174,11 +174,15 @@
      * того, как данные для подписания будут переданы на сервер. Может быть использована для
      * того, чтобы перестать отображать QR код, так как он больше не действителен.
      *
+     * @param {Function} [debugErrorsCallback] опциональная функция, которая будет вызвана для
+     * каждого игнорируемого исключения полученного при обработке. Функция предназначена для
+     * отладки.
+     *
      * @returns {Promise<String[]>} массив подписей под зарегистрированными блоками данных.
      *
      * @throws QRSigningError
      */
-    async getSignatures(dataSentCallback) {
+    async getSignatures(dataSentCallback, debugErrorsCallback) {
       if (this.documentsToSign.length === 0) {
         throw new QRSigningError('Данные на подписание предоставлены не корректно.', 'Не зарегистрировано ни одного блока данных для подписания.');
       }
@@ -208,6 +212,9 @@
             break;
           } catch (err) {
             // Игнорируем исключение и пробуем снова.
+            if (typeof debugErrorsCallback === 'function') {
+              debugErrorsCallback(err);
+            }
           }
         }
 
@@ -253,6 +260,9 @@
             break;
           } catch (err) {
             // Игнорируем исключение и пробуем снова.
+            if (typeof debugErrorsCallback === 'function') {
+              debugErrorsCallback(err);
+            }
           }
         }
 

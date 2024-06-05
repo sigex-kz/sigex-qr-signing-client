@@ -11,6 +11,7 @@ new Vue({ // eslint-disable-line no-new, no-undef
     eGovBusinessLaunchLink: '',
     signatures: [],
     waiting: false,
+    debugLog: '',
   },
 
   methods: {
@@ -43,9 +44,14 @@ new Vue({ // eslint-disable-line no-new, no-undef
         this.qrCodeImage = `data:image/gif;base64,${qrCode}`;
         this.eGovMobileLaunchLink = qrSigner.getEGovMobileLaunchLink();
         this.eGovBusinessLaunchLink = qrSigner.getEGovBusinessLaunchLink();
-        const signatures = await qrSigner.getSignatures(() => {
-          this.qrCodeImage = null;
-        });
+        const signatures = await qrSigner.getSignatures(
+          () => {
+            this.qrCodeImage = null;
+          },
+          (err) => {
+            this.debugLog += (err.message + '\n');
+          },
+        );
 
         for (const signature of signatures) {
           this.signatures.push(signature);

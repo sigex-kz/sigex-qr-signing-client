@@ -7,6 +7,7 @@
 Документация по API: [https://sigex-kz.github.io/sigex-qr-signing-client/api/](https://sigex-kz.github.io/sigex-qr-signing-client/api/).
 
 Пример: [https://sigex-kz.github.io/sigex-qr-signing-client/](https://sigex-kz.github.io/sigex-qr-signing-client/).
+
 Пример подписания нескольких документов: [https://sigex-kz.github.io/sigex-qr-signing-client/multi.html](https://sigex-kz.github.io/sigex-qr-signing-client/multi.html).
 
 Библиотека использует следующие вызовы API сервиса SIGEX:

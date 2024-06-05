@@ -82,6 +82,13 @@
               </div>
             </div>
 
+            <div>
+              <div v-if="debugLog">
+                <label>В процессе обработки возникли следующие исключения:</label>
+                <textarea class="form-control my-3" v-model="debugLog" rows="3" disabled></textarea>
+              </div>
+            </div>
+
           </form>
 
         </div>
