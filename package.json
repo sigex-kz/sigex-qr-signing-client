@@ -1,6 +1,6 @@
 {
   "name": "sigex-qr-signing-client",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Клиент для работы с API сервиса SIGEX для подписания электронных документов ЭЦП через QR с помощью eGov mobile (aka QR подписание)",
   "author": "sigex-kz",
   "repository": {
