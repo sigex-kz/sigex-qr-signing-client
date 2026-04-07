@@ -5,10 +5,21 @@
    * Класс ошибок QRSigningError.
    */
   class QRSigningError extends Error {
-    constructor(message, details) {
+    /**
+     * Конструктор.
+     *
+     * @param {String} message сообщение об ошибке.
+     *
+     * @param {String} [details] пояснение к сообщению об ошибке.
+     *
+     * @param {Boolean} [canceledByUser] была ли ошибка вызвана тем,
+     * что пользователь отменил действие.
+     */
+    constructor(message, details, canceledByUser) {
       super(message);
       this.name = 'QRSigningError';
       this.details = details;
+      this.canceledByUser = canceledByUser;
     }
   }
 
@@ -112,13 +123,13 @@
         );
 
         if (!response.ok) {
-          throw new Error(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
+          throw new QRSigningError(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
         }
 
         const responseJson = await response.json();
 
         if (responseJson.message) {
-          throw new Error(responseJson.message);
+          throw new QRSigningError('Ошибка', `message: ${responseJson.message}`);
         }
 
         this.qrCode = responseJson.qrCode;
@@ -191,6 +202,7 @@
       try {
         const data = {
           signMethod: this.attach ? 'CMS_WITH_DATA' : 'CMS_SIGN_ONLY',
+          version: 1,
           documentsToSign: this.documentsToSign,
         };
 
@@ -219,17 +231,17 @@
         }
 
         if (!response) {
-          throw new Error(`Не удалось получить ответа от сервера ${this.dataURL}.`);
+          throw new QRSigningError(`Не удалось получить ответа от сервера ${this.dataURL}.`);
         }
 
         if (!response.ok) {
-          throw new Error(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
+          throw new QRSigningError(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
         }
 
         const responseJson = await response.json();
 
         if (responseJson.message) {
-          throw new Error(responseJson.message);
+          throw new QRSigningError('Ошибка', `message: ${responseJson.message}`);
         }
       } catch (err) {
         throw new QRSigningError('Не удалось отправить данные.', err);
@@ -267,17 +279,21 @@
         }
 
         if (!response) {
-          throw new Error(`Не удалось получить ответа от сервера ${this.signURL}.`);
+          throw new QRSigningError(`Не удалось получить ответа от сервера ${this.signURL}.`);
         }
 
         if (!response.ok) {
-          throw new Error(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
+          throw new QRSigningError(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
         }
 
         const responseJson = await response.json();
 
         if (responseJson.message) {
-          throw new Error(responseJson.message);
+          throw new QRSigningError('Ошибка', `message: ${responseJson.message}`);
+        }
+
+        if (responseJson.status && responseJson.status === 'CANCELED') {
+          throw new QRSigningError('Отмена подписания', 'Подписание отменено пользователем', true);
         }
 
         const signatures = responseJson.documentsToSign.map(
