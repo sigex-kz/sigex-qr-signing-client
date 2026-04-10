@@ -108,40 +108,43 @@
      * @throws QRSigningError
      */
     async registerQRSinging() {
-      try {
-        const data = {
-          description: this.description,
-        };
+      const url = `${this.baseUrl}/api/egovQr`;
+      const data = {
+        description: this.description,
+      };
 
-        const response = await fetch(
-          `${this.baseUrl}/api/egovQr`,
+      let response;
+
+      try {
+        response = await fetch(
+          url,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
           },
         );
-
-        if (!response.ok) {
-          throw new QRSigningError(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
-        }
-
-        const responseJson = await response.json();
-
-        if (responseJson.message) {
-          throw new QRSigningError('Ошибка', `message: ${responseJson.message}`);
-        }
-
-        this.qrCode = responseJson.qrCode;
-        this.dataURL = responseJson.dataURL;
-        this.signURL = responseJson.signURL;
-        this.eGovMobileLaunchLink = responseJson.eGovMobileLaunchLink;
-        this.eGovBusinessLaunchLink = responseJson.eGovBusinessLaunchLink;
-
-        return this.qrCode;
       } catch (err) {
-        throw new QRSigningError('Не удалось зарегистрировать новый идентификатор QR.', err);
+        throw new QRSigningError(`Не удалось получить ответа от сервера ${url}.`, err.toString());
       }
+
+      if (!response.ok) {
+        throw new QRSigningError(`Сервер вернул статус '${response.status}: ${response.statusText}'`);
+      }
+
+      const responseJson = await response.json();
+
+      if (responseJson.message) {
+        throw new QRSigningError('Ошибка регистрации процедуры подписания', `message: ${responseJson.message}`);
+      }
+
+      this.qrCode = responseJson.qrCode;
+      this.dataURL = responseJson.dataURL;
+      this.signURL = responseJson.signURL;
+      this.eGovMobileLaunchLink = responseJson.eGovMobileLaunchLink;
+      this.eGovBusinessLaunchLink = responseJson.eGovBusinessLaunchLink;
+
+      return this.qrCode;
     }
 
     /**
@@ -199,7 +202,7 @@
       }
 
       // Отправка данных
-      try {
+      {
         const data = {
           signMethod: this.attach ? 'CMS_WITH_DATA' : 'CMS_SIGN_ONLY',
           version: 1,
@@ -241,10 +244,8 @@
         const responseJson = await response.json();
 
         if (responseJson.message) {
-          throw new QRSigningError('Ошибка', `message: ${responseJson.message}`);
+          throw new QRSigningError('Ошибка отправки данных', `message: ${responseJson.message}`);
         }
-      } catch (err) {
-        throw new QRSigningError('Не удалось отправить данные.', err);
       }
 
       try {
@@ -256,7 +257,7 @@
       }
 
       // Получение подписей
-      try {
+      {
         let response;
 
         for (let i = 0; i < this.retries; i += 1) {
@@ -289,7 +290,7 @@
         const responseJson = await response.json();
 
         if (responseJson.message) {
-          throw new QRSigningError('Ошибка', `message: ${responseJson.message}`);
+          throw new QRSigningError('Ошибка получения подписей', `message: ${responseJson.message}`);
         }
 
         if (responseJson.status && responseJson.status === 'CANCELED') {
@@ -301,8 +302,6 @@
         );
 
         return signatures;
-      } catch (err) {
-        throw new QRSigningError('Не удалось получить подписи.', err);
       }
     }
 
